@@ -1,0 +1,49 @@
+<Window x:Class="BankApplication.InstalmentWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+        xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+        xmlns:dxch="http://schemas.devexpress.com/winfx/2008/xaml/charts"
+        xmlns:local="clr-namespace:BankApplication"
+        mc:Ignorable="d"
+        Title="InstalmentWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <dxg:GridControl x:Name="instalmentGrid" ItemsSource="{Binding InstalmentRecords}" Grid.Row="0">
+            <dxg:GridColumn FieldName="Date"/>
+            <dxg:GridColumn FieldName="Payment"/>
+            <dxg:GridColumn FieldName="Debt"/>
+            <dxg:GridColumn FieldName="Percentage"/>
+            <dxg:GridColumn FieldName="Balance"/>
+        
+            <dxg:GridControl.View>
+                <dxg:TableView AllowEditing="False"/>
+            </dxg:GridControl.View>
+        </dxg:GridControl>
+        
+        <dxch:ChartControl Grid.Row="1">
+            <dxch:XYDiagram2D SeriesItemsSource="{Binding Data}">
+                <dxch:XYDiagram2D.SeriesItemTemplate>
+                    <DataTemplate>
+                        <dxch:AreaSeries2D DisplayName="{Binding Name}" 
+                                           DataSource="{Binding Values}"
+                                           ArgumentDataMember="Date"
+                                           ValueDataMember="Value" 
+                                           Transparency="0.5" 
+                                           MarkerVisible="True"
+                                           MarkerSize="10">
+                            <dxch:AreaSeries2D.MarkerModel>
+                                <dxch:CircleMarker2DModel/>
+                            </dxch:AreaSeries2D.MarkerModel>
+                        </dxch:AreaSeries2D>
+                    </DataTemplate>
+                </dxch:XYDiagram2D.SeriesItemTemplate>
+            </dxch:XYDiagram2D>
+        </dxch:ChartControl>
+    </Grid>
+</Window>
