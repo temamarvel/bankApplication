@@ -70,39 +70,47 @@ namespace BankApplication {
                 AnnuityRecords.Add(new InstalmentRecord() { Date = recordDate, TotalPayment = Math.Round(totalPayment, 2), DebtPayment = Math.Round(debtPayment, 2), Percentage = percentage, Balance = Math.Round(balance, 2) });
             }
 
-            AnnuityData = new ObservableCollection<DataSeries>();
+            AnnuityData = CreateData(AnnuityRecords);
+
+            return Math.Round(totalPercentage, 2);
+        }
+
+        ObservableCollection<DataSeries> CreateData( ObservableCollection<InstalmentRecord> records)
+        {
+            ObservableCollection<DataSeries> data = new ObservableCollection<DataSeries>();
 
             ObservableCollection<DataPoint> valuesPayment = new ObservableCollection<DataPoint>();
-            foreach (InstalmentRecord record in AnnuityRecords)
+            foreach (InstalmentRecord record in records)
             {
                 valuesPayment.Add(new DataPoint(record.Date, record.TotalPayment));
             }
 
             ObservableCollection<DataPoint> valuesDept = new ObservableCollection<DataPoint>();
-            foreach (InstalmentRecord record in AnnuityRecords)
+            foreach (InstalmentRecord record in records)
             {
                 valuesDept.Add(new DataPoint(record.Date, record.DebtPayment));
             }
 
             ObservableCollection<DataPoint> valuesPercentage = new ObservableCollection<DataPoint>();
-            foreach (InstalmentRecord record in AnnuityRecords)
+            foreach (InstalmentRecord record in records)
             {
                 valuesPercentage.Add(new DataPoint(record.Date, record.Percentage));
             }
 
             ObservableCollection<DataPoint> valuesBalance = new ObservableCollection<DataPoint>();
-            foreach (InstalmentRecord record in AnnuityRecords)
+            foreach (InstalmentRecord record in records)
             {
                 valuesBalance.Add(new DataPoint(record.Date, record.Balance));
             }
 
-            AnnuityData.Add(new DataSeries() { Name = "Payment", Values = valuesPayment });
-            AnnuityData.Add(new DataSeries() { Name = "Dept", Values = valuesDept });
-            AnnuityData.Add(new DataSeries() { Name = "Percentage", Values = valuesPercentage });
-            AnnuityData.Add(new DataSeries() { Name = "Balance", Values = valuesBalance });
+            data.Add(new DataSeries() { Name = "TotalPayment", Values = valuesPayment });
+            data.Add(new DataSeries() { Name = "DebtPayment", Values = valuesDept });
+            data.Add(new DataSeries() { Name = "Percentage", Values = valuesPercentage });
+            data.Add(new DataSeries() { Name = "Balance", Values = valuesBalance });
 
-            return Math.Round(totalPercentage,2);
+            return data;
         }
+
         double CalculateDifferentialPayments(Customer customer)
         {
             DifferentialRecords = new ObservableCollection<InstalmentRecord>();
@@ -133,36 +141,7 @@ namespace BankApplication {
                 DifferentialRecords.Add(new InstalmentRecord() { Date = recordDate, TotalPayment = Math.Round(totalPayment, 2), DebtPayment = Math.Round(debtPayment, 2), Percentage = percentage, Balance = Math.Round(balance, 2) });
             }
 
-            DifferentialData = new ObservableCollection<DataSeries>();
-
-            ObservableCollection<DataPoint> valuesPayment = new ObservableCollection<DataPoint>();
-            foreach (InstalmentRecord record in DifferentialRecords)
-            {
-                valuesPayment.Add(new DataPoint(record.Date, record.TotalPayment));
-            }
-
-            ObservableCollection<DataPoint> valuesDept = new ObservableCollection<DataPoint>();
-            foreach (InstalmentRecord record in DifferentialRecords)
-            {
-                valuesDept.Add(new DataPoint(record.Date, record.DebtPayment));
-            }
-
-            ObservableCollection<DataPoint> valuesPercentage = new ObservableCollection<DataPoint>();
-            foreach (InstalmentRecord record in DifferentialRecords)
-            {
-                valuesPercentage.Add(new DataPoint(record.Date, record.Percentage));
-            }
-
-            ObservableCollection<DataPoint> valuesBalance = new ObservableCollection<DataPoint>();
-            foreach (InstalmentRecord record in DifferentialRecords)
-            {
-                valuesBalance.Add(new DataPoint(record.Date, record.Balance));
-            }
-
-            DifferentialData.Add(new DataSeries() { Name = "TotalPayment", Values = valuesPayment });
-            DifferentialData.Add(new DataSeries() { Name = "DebtPayment", Values = valuesDept });
-            DifferentialData.Add(new DataSeries() { Name = "Percentage", Values = valuesPercentage });
-            DifferentialData.Add(new DataSeries() { Name = "Balance", Values = valuesBalance });
+            DifferentialData = CreateData(DifferentialRecords);
 
             return Math.Round(totalPercentage, 2);
         }

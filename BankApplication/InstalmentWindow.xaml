@@ -54,85 +54,90 @@
         
         </StackPanel>
 
-    <dx:DXTabControl Grid.Row="1">
-        <dx:DXTabItem Header="Annuity payments">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <dxg:GridControl x:Name="annuityGrid" ItemsSource="{Binding AnnuityRecords}" Grid.Row="0">
-                    <dxg:GridColumn FieldName="Date"/>
-                    <dxg:GridColumn FieldName="TotalPayment"/>
-                    <dxg:GridColumn FieldName="DebtPayment"/>
-                    <dxg:GridColumn FieldName="Percentage"/>
-                    <dxg:GridColumn FieldName="Balance"/>
+        <dx:DXTabControl Grid.Row="1">
+            <dx:DXTabItem Header="Annuity payments">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <dxg:GridControl x:Name="annuityGrid" ItemsSource="{Binding AnnuityRecords}" Grid.Row="0">
+                        <dxg:GridColumn FieldName="Date"/>
+                        <dxg:GridColumn FieldName="TotalPayment"/>
+                        <dxg:GridColumn FieldName="DebtPayment"/>
+                        <dxg:GridColumn FieldName="Percentage"/>
+                        <dxg:GridColumn FieldName="Balance"/>
 
-                    <dxg:GridControl.View>
-                        <dxg:TableView AllowEditing="False"/>
-                    </dxg:GridControl.View>
-                </dxg:GridControl>
-                <dxch:ChartControl Grid.Row="1">
-                    <dxch:XYDiagram2D SeriesItemsSource="{Binding AnnuityData}">
-                        <dxch:XYDiagram2D.SeriesItemTemplate>
-                            <DataTemplate>
-                                <dxch:AreaSeries2D DisplayName="{Binding Name}" 
+                        <dxg:GridControl.View>
+                            <dxg:TableView AllowEditing="False"/>
+                        </dxg:GridControl.View>
+                    </dxg:GridControl>
+                    <dxch:ChartControl Grid.Row="1">
+                        <dxch:ChartControl.Legends>
+                            <dxch:Legend MarkerMode="CheckBoxAndMarker"/>
+                        </dxch:ChartControl.Legends>
+                        <dxch:XYDiagram2D SeriesItemsSource="{Binding AnnuityData}">
+                            <dxch:XYDiagram2D.SeriesItemTemplate>
+                                <DataTemplate>
+                                    <dxch:AreaSeries2D DisplayName="{Binding Name}" 
                                            DataSource="{Binding Values}"
                                            ArgumentDataMember="Date"
                                            ValueDataMember="Value" 
                                            Transparency="0.5" 
                                            MarkerVisible="True"
                                            MarkerSize="10">
-                                    <dxch:AreaSeries2D.MarkerModel>
-                                        <dxch:CircleMarker2DModel/>
-                                    </dxch:AreaSeries2D.MarkerModel>
-                                </dxch:AreaSeries2D>
-                            </DataTemplate>
-                        </dxch:XYDiagram2D.SeriesItemTemplate>
-                    </dxch:XYDiagram2D>
-                </dxch:ChartControl>
-            </Grid>
-        </dx:DXTabItem>
-        <dx:DXTabItem Header="Differential payments">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
+                                        <dxch:AreaSeries2D.MarkerModel>
+                                            <dxch:CircleMarker2DModel/>
+                                        </dxch:AreaSeries2D.MarkerModel>
+                                    </dxch:AreaSeries2D>
+                                </DataTemplate>
+                            </dxch:XYDiagram2D.SeriesItemTemplate>
+                        </dxch:XYDiagram2D>
+                    </dxch:ChartControl>
+                </Grid>
+            </dx:DXTabItem>
+            <dx:DXTabItem Header="Differential payments">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
 
+                    <dxg:GridControl x:Name="differentialGrid" ItemsSource="{Binding DifferentialRecords}" Grid.Row="0">
+                        <dxg:GridColumn FieldName="Date"/>
+                        <dxg:GridColumn FieldName="TotalPayment"/>
+                        <dxg:GridColumn FieldName="DebtPayment"/>
+                        <dxg:GridColumn FieldName="Percentage"/>
+                        <dxg:GridColumn FieldName="Balance"/>
 
-                <dxg:GridControl x:Name="differentialGrid" ItemsSource="{Binding DifferentialRecords}" Grid.Row="0">
-                    <dxg:GridColumn FieldName="Date"/>
-                    <dxg:GridColumn FieldName="TotalPayment"/>
-                    <dxg:GridColumn FieldName="DebtPayment"/>
-                    <dxg:GridColumn FieldName="Percentage"/>
-                    <dxg:GridColumn FieldName="Balance"/>
-
-                    <dxg:GridControl.View>
-                        <dxg:TableView AllowEditing="False"/>
-                    </dxg:GridControl.View>
-                </dxg:GridControl>
-                <dxch:ChartControl Grid.Row="1">
-                    <dxch:XYDiagram2D SeriesItemsSource="{Binding DifferentialData}">
-                        <dxch:XYDiagram2D.SeriesItemTemplate>
-                            <DataTemplate>
-                                <dxch:AreaSeries2D DisplayName="{Binding Name}" 
+                        <dxg:GridControl.View>
+                            <dxg:TableView AllowEditing="False"/>
+                        </dxg:GridControl.View>
+                    </dxg:GridControl>
+                    <dxch:ChartControl Grid.Row="1">
+                        <dxch:ChartControl.Legends>
+                            <dxch:Legend MarkerMode="CheckBoxAndMarker"/>
+                        </dxch:ChartControl.Legends>
+                        <dxch:XYDiagram2D SeriesItemsSource="{Binding DifferentialData}">
+                            <dxch:XYDiagram2D.SeriesItemTemplate>
+                                <DataTemplate>
+                                    <dxch:AreaSeries2D DisplayName="{Binding Name}" 
                                            DataSource="{Binding Values}"
                                            ArgumentDataMember="Date"
                                            ValueDataMember="Value" 
                                            Transparency="0.5" 
                                            MarkerVisible="True"
                                            MarkerSize="10">
-                                    <dxch:AreaSeries2D.MarkerModel>
-                                        <dxch:CircleMarker2DModel/>
-                                    </dxch:AreaSeries2D.MarkerModel>
-                                </dxch:AreaSeries2D>
-                            </DataTemplate>
-                        </dxch:XYDiagram2D.SeriesItemTemplate>
-                    </dxch:XYDiagram2D>
-                </dxch:ChartControl>
-            </Grid>
-        </dx:DXTabItem>
-    </dx:DXTabControl>
+                                        <dxch:AreaSeries2D.MarkerModel>
+                                            <dxch:CircleMarker2DModel/>
+                                        </dxch:AreaSeries2D.MarkerModel>
+                                    </dxch:AreaSeries2D>
+                                </DataTemplate>
+                            </dxch:XYDiagram2D.SeriesItemTemplate>
+                        </dxch:XYDiagram2D>
+                    </dxch:ChartControl>
+                </Grid>
+            </dx:DXTabItem>
+        </dx:DXTabControl>
     </Grid>
 </Window>
