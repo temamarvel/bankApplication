@@ -5,7 +5,7 @@ using System.Linq;
 using System.Windows;
 
 namespace BankApplication {
-    public partial class InstalmentWindow : Window {
+    public partial class InstalmentWindow {
         public InstalmentWindow() {
             InitializeComponent();
         }

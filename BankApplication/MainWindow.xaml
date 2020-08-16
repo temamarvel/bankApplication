@@ -8,49 +8,28 @@
         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
         xmlns:local="clr-namespace:BankApplication"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525" Loaded="Window_Loaded">
+        Title="Bank Application" Height="500" Width="1000" Loaded="Window_Loaded">
     <Window.Resources>
         <CollectionViewSource x:Key="customerViewSource" d:DesignSource="{d:DesignInstance {x:Type local:Customer}, CreateList=True}"/>
     </Window.Resources>
     <Grid DataContext="{StaticResource customerViewSource}">
         <Grid.RowDefinitions>
-            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <!--<DataGrid x:Name="customerDataGrid" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" Margin="86,109,31,10" Grid.RowSpan="2" RowDetailsVisibilityMode="VisibleWhenSelected">
-            <DataGrid.Columns>
-                <DataGridTextColumn x:Name="currencyColumn" Binding="{Binding Currency}" Header="Currency" Width="SizeToHeader"/>
-                <DataGridTemplateColumn x:Name="endDateColumn" Header="End Date" Width="SizeToHeader">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <DatePicker SelectedDate="{Binding EndDate, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTextColumn x:Name="idColumn" Binding="{Binding Id}" Header="Id" Width="SizeToHeader"/>
-                <DataGridTextColumn x:Name="interestRateColumn" Binding="{Binding InterestRate}" Header="Interest Rate" Width="SizeToHeader"/>
-                <DataGridTextColumn x:Name="nameColumn" Binding="{Binding Name}" Header="Name" Width="SizeToHeader"/>
-                <DataGridTemplateColumn x:Name="startDateColumn" Header="Start Date" Width="SizeToHeader">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <DatePicker SelectedDate="{Binding StartDate, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTextColumn x:Name="surnameColumn" Binding="{Binding Surname}" Header="Surname" Width="SizeToHeader"/>
-                <DataGridTextColumn x:Name="valueColumn" Binding="{Binding Value}" Header="Value" Width="SizeToHeader"/>
-            </DataGrid.Columns>
-        </DataGrid>-->
-        <StackPanel x:Name="optionsStack" Grid.Row="0">
-            <dxe:TextEdit x:Name="nameEditor" NullText="Enter Name"/>
-            <dxe:TextEdit x:Name="surnameEditor" NullText="Enter Surname"/>
-            <dxe:TextEdit x:Name="valueEditor" NullText="Enter loan value"/>
-            <dxe:ComboBoxEdit x:Name="currencyEditor" ItemsSource="{dxe:EnumItemsSource EnumType=local:Currency}" SelectedIndex="0"/>
-            <dxe:TextEdit x:Name="interestRateEditor" NullText="Enter interest rate"/>
-            <dxe:DateEdit x:Name="startDateEditor" NullText="Enter start date "/>
-            <dxe:DateEdit x:Name="endDateEditor" NullText="Enter end date"/>
+      
+        <StackPanel x:Name="optionsStack" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0">
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type dx:SimpleButton}">
+                    <Setter Property="Margin" Value="10"/>
+                    <Setter Property="Width" Value="150"/>
+                    <Setter Property="Height" Value="50"/>
+                </Style>
+            </StackPanel.Resources>
+
             <dx:SimpleButton x:Name="addLoanButton" Content="Add loan" Click="AddLoanButton_OnClick"/>
             <dx:SimpleButton x:Name="deleteLoanButton" Content="Delete loan" Click="DeleteLoanButton_OnClick"/>
+            <dx:SimpleButton x:Name="showDetailsButton" Content="Show details" Click="ShowDetailsButton_OnClick"/>
         </StackPanel>
         <dxg:GridControl x:Name="grid" ItemsSource="{Binding}" MouseDoubleClick="Grid_OnMouseDoubleClick" Grid.Row="1">
             <dxg:GridColumn FieldName="Name"/>

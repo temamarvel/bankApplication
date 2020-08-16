@@ -1,0 +1,34 @@
+﻿<dx:ThemedWindow  xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+                  x:Class="BankApplication.AddWindow"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BankApplication" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+        mc:Ignorable="d"
+        Title="AddWindow"
+                  SizeToContent="Height"
+                  Closing="ThemedWindow_Closing"
+                  Height="450" Width="800">
+    <StackPanel>
+        <StackPanel.Resources>
+            <Thickness x:Key="margin">10, 10, 10, 0</Thickness>
+            <Style TargetType="{x:Type dxe:TextEdit}">
+                <Setter Property="Margin" Value="{StaticResource margin}"/>
+            </Style>
+            <Style TargetType="{x:Type dxe:ComboBoxEdit}">
+                <Setter Property="Margin" Value="{StaticResource margin}"/>
+            </Style>
+            <Style TargetType="{x:Type dxe:DateEdit}">
+                <Setter Property="Margin" Value="{StaticResource margin}"/>
+            </Style>
+        </StackPanel.Resources>
+        <dxe:TextEdit x:Name="nameEditor" NullText="Enter Name"/>
+        <dxe:TextEdit x:Name="surnameEditor" NullText="Enter Surname"/>
+        <dxe:TextEdit x:Name="valueEditor" NullText="Enter loan value"/>
+        <dxe:ComboBoxEdit x:Name="currencyEditor" ItemsSource="{dxe:EnumItemsSource EnumType=local:Currency}" SelectedIndex="0"/>
+        <dxe:TextEdit x:Name="interestRateEditor" NullText="Enter interest rate"/>
+        <dxe:DateEdit x:Name="startDateEditor" NullText="Enter start date "/>
+        <dxe:DateEdit x:Name="endDateEditor" NullText="Enter end date"/>
+    </StackPanel>
+</dx:ThemedWindow>
