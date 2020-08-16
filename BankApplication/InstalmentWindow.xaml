@@ -8,22 +8,51 @@
         xmlns:dxch="http://schemas.devexpress.com/winfx/2008/xaml/charts"
         xmlns:local="clr-namespace:BankApplication"
         mc:Ignorable="d"
-        Title="InstalmentWindow" Height="450" Width="800">
+        Title="InstalmentWindow" WindowState="Maximized" Height="900" Width="1200">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
     
-    <StackPanel Grid.Row="0">
-        <Label Content="{Binding CustomerName}"/>
-        <Label Content="{Binding LoanSum}"/>
-        <Label Content="{Binding InterestRate}"/>
-        <Label Content="{Binding TotalAnnuityPercentage}"/>
-        <Label Content="{Binding TotalDifferentialPercentage}"/>
+    <StackPanel Grid.Row="0" Margin="20">
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type Label}">
+                    <Setter Property="Margin" Value="10,10,10,0"/>
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                </Style>
+            </StackPanel.Resources>
+
+            <Label Content="{Binding CustomerName}" FontSize="20" FontWeight="Bold" Foreground="Green" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Column="0" Grid.Row="0" >
+                    <Label Content="Sum of loan" FontSize="12" FontWeight="Bold" />
+                    <Label Content="{Binding LoanSum}"  FontSize="20" FontWeight="Bold" />
+                </StackPanel>
+                <StackPanel Grid.Column="0" Grid.Row="1" >
+                    <Label Content="Interest rate" FontSize="12" FontWeight="Bold" />
+                    <Label Content="{Binding InterestRate}"  FontSize="20" FontWeight="Bold" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Grid.Row="0" >
+                    <Label Content="Total annuity percantage" FontSize="12" FontWeight="Bold" />
+                    <Label Content="{Binding TotalAnnuityPercentage}" FontSize="20" FontWeight="Bold" />
+                </StackPanel>
+                <StackPanel  Grid.Column="1" Grid.Row="1" >
+                    <Label Content="Total annuity percantage" FontSize="12" FontWeight="Bold"/>
+                    <Label Content="{Binding TotalDifferentialPercentage}" FontSize="20" FontWeight="Bold" />
+                </StackPanel>
+            </Grid>
         
-        
-    </StackPanel>
+        </StackPanel>
 
     <dx:DXTabControl Grid.Row="1">
         <dx:DXTabItem Header="Annuity payments">
