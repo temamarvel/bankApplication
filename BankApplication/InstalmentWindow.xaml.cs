@@ -19,68 +19,142 @@ namespace BankApplication {
     }
 
     public class InstalmentViewModel {
-        public ObservableCollection<InstalmentRecord> InstalmentRecords { get; set; }
-        public ObservableCollection<DataSeries> Data { get; set; }
+        public ObservableCollection<InstalmentRecord> AnnuityRecords { get; set; }
+        public ObservableCollection<InstalmentRecord> DifferentialRecords { get; set; }
+        public ObservableCollection<DataSeries> AnnuityData { get; set; }
+        public ObservableCollection<DataSeries> DifferentialData { get; set; }
 
-        public InstalmentViewModel(Customer customer) {
-            InstalmentRecords = new ObservableCollection<InstalmentRecord>();
+        public InstalmentViewModel(Customer customer)
+        {
+            CalculateAnnuityPayments(customer);
+            CalculateDifferentialPayments(customer);
+        }
+
+        void CalculateAnnuityPayments(Customer customer)
+        {
+            AnnuityRecords = new ObservableCollection<InstalmentRecord>();
 
 
             var period = customer.EndDate - customer.StartDate;
             var months = period.Value.Days / 30;
 
             double interestRate = (double)customer.InterestRate / 12 / 100;
-            double payment = Math.Round((double)customer.Value * ((interestRate * Math.Pow(1 + interestRate, months)) / (Math.Pow(1 + interestRate, months) - 1)));
+            double totalPayment = Math.Round((double)customer.Value * ((interestRate * Math.Pow(1 + interestRate, months)) / (Math.Pow(1 + interestRate, months) - 1)));
             double balance = (double)customer.Value;
 
             DateTime recordDate = customer.StartDate.Value;
-            for(int i = 1; i <= months; i++) {
+            for (int i = 1; i <= months; i++)
+            {
                 recordDate = recordDate.AddDays(30);
                 double percentage = Math.Round(balance * interestRate, 2);
-                double debt = Math.Round(payment - percentage, 2);
-                balance -= debt;
-                if(i == months) {
-                    payment += balance;
+                double debtPayment = Math.Round(totalPayment - percentage, 2);
+                balance -= debtPayment;
+                if (i == months)
+                {
+                    totalPayment += balance;
                     balance = 0;
                 }
 
-                InstalmentRecords.Add(new InstalmentRecord() {Date = recordDate, Payment = payment, Debt = debt, Percentage = percentage, Balance = balance});
+                AnnuityRecords.Add(new InstalmentRecord() { Date = recordDate, TotalPayment = totalPayment, DebtPayment = debtPayment, Percentage = percentage, Balance = balance });
             }
 
-            Data = new ObservableCollection<DataSeries>();
+            AnnuityData = new ObservableCollection<DataSeries>();
 
             ObservableCollection<DataPoint> valuesPayment = new ObservableCollection<DataPoint>();
-            foreach(InstalmentRecord record in InstalmentRecords) {
-                valuesPayment.Add(new DataPoint(record.Date, record.Payment));
+            foreach (InstalmentRecord record in AnnuityRecords)
+            {
+                valuesPayment.Add(new DataPoint(record.Date, record.TotalPayment));
             }
 
             ObservableCollection<DataPoint> valuesDept = new ObservableCollection<DataPoint>();
-            foreach(InstalmentRecord record in InstalmentRecords) {
-                valuesDept.Add(new DataPoint(record.Date, record.Debt));
+            foreach (InstalmentRecord record in AnnuityRecords)
+            {
+                valuesDept.Add(new DataPoint(record.Date, record.DebtPayment));
             }
 
             ObservableCollection<DataPoint> valuesPercentage = new ObservableCollection<DataPoint>();
-            foreach(InstalmentRecord record in InstalmentRecords) {
+            foreach (InstalmentRecord record in AnnuityRecords)
+            {
                 valuesPercentage.Add(new DataPoint(record.Date, record.Percentage));
             }
 
             ObservableCollection<DataPoint> valuesBalance = new ObservableCollection<DataPoint>();
-            foreach(InstalmentRecord record in InstalmentRecords) {
+            foreach (InstalmentRecord record in AnnuityRecords)
+            {
                 valuesBalance.Add(new DataPoint(record.Date, record.Balance));
             }
 
-            Data.Add(new DataSeries() {Name = "Payment", Values = valuesPayment});
-            Data.Add(new DataSeries() {Name = "Dept", Values = valuesDept});
-            Data.Add(new DataSeries() {Name = "Percentage", Values = valuesPercentage});
-            Data.Add(new DataSeries() {Name = "Balance", Values = valuesBalance});
+            AnnuityData.Add(new DataSeries() { Name = "Payment", Values = valuesPayment });
+            AnnuityData.Add(new DataSeries() { Name = "Dept", Values = valuesDept });
+            AnnuityData.Add(new DataSeries() { Name = "Percentage", Values = valuesPercentage });
+            AnnuityData.Add(new DataSeries() { Name = "Balance", Values = valuesBalance });
+        }
+        void CalculateDifferentialPayments(Customer customer)
+        {
+            DifferentialRecords = new ObservableCollection<InstalmentRecord>();
+
+
+            var period = customer.EndDate - customer.StartDate;
+            var months = period.Value.Days / 30;
+
+            double interestRate = (double)customer.InterestRate / 12 / 100;
+            double debtPayment = Math.Round((double)customer.Value/months, 2);
+            double balance = Math.Round((double)customer.Value, 2);
+
+            DateTime recordDate = customer.StartDate.Value;
+            for (int i = 1; i <= months; i++)
+            {
+                recordDate = recordDate.AddDays(30);
+                double percentage = Math.Round(balance * interestRate, 2);
+                double totalPayment = Math.Round(debtPayment + percentage, 2);
+                balance -= debtPayment;
+                if (i == months)
+                {
+                    debtPayment += balance;
+                    balance = 0;
+                }
+
+                DifferentialRecords.Add(new InstalmentRecord() { Date = recordDate, TotalPayment = totalPayment, DebtPayment = debtPayment, Percentage = percentage, Balance = balance });
+            }
+
+            DifferentialData = new ObservableCollection<DataSeries>();
+
+            ObservableCollection<DataPoint> valuesPayment = new ObservableCollection<DataPoint>();
+            foreach (InstalmentRecord record in DifferentialRecords)
+            {
+                valuesPayment.Add(new DataPoint(record.Date, record.TotalPayment));
+            }
+
+            ObservableCollection<DataPoint> valuesDept = new ObservableCollection<DataPoint>();
+            foreach (InstalmentRecord record in DifferentialRecords)
+            {
+                valuesDept.Add(new DataPoint(record.Date, record.DebtPayment));
+            }
+
+            ObservableCollection<DataPoint> valuesPercentage = new ObservableCollection<DataPoint>();
+            foreach (InstalmentRecord record in DifferentialRecords)
+            {
+                valuesPercentage.Add(new DataPoint(record.Date, record.Percentage));
+            }
+
+            ObservableCollection<DataPoint> valuesBalance = new ObservableCollection<DataPoint>();
+            foreach (InstalmentRecord record in DifferentialRecords)
+            {
+                valuesBalance.Add(new DataPoint(record.Date, record.Balance));
+            }
+
+            DifferentialData.Add(new DataSeries() { Name = "TotalPayment", Values = valuesPayment });
+            DifferentialData.Add(new DataSeries() { Name = "DebtPayment", Values = valuesDept });
+            DifferentialData.Add(new DataSeries() { Name = "Percentage", Values = valuesPercentage });
+            DifferentialData.Add(new DataSeries() { Name = "Balance", Values = valuesBalance });
         }
     }
 
 
     public class InstalmentRecord {
         public DateTime Date { get; set; }
-        public double Payment { get; set; }
-        public double Debt { get; set; }
+        public double TotalPayment { get; set; }
+        public double DebtPayment { get; set; }
         public double Percentage { get; set; }
         public double Balance { get; set; }
 

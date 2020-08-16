@@ -6,9 +6,6 @@ using System.Windows.Input;
 using DevExpress.Xpf.Editors.Helpers;
 
 namespace BankApplication {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow {
 
         BankDBEntities context = new BankDBEntities();
