@@ -1,10 +1,12 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 
 namespace BankApplication {
+
+    //ОКНО ГРАФИКА ПЛАТЕЖЕЙ
     public partial class InstalmentWindow {
         public InstalmentWindow() {
             InitializeComponent();
@@ -12,13 +14,19 @@ namespace BankApplication {
 
         public InstalmentWindow(Customer customer) : this() {
             Customer = customer;
+            //при открытии окна создаем экземпляр моедли данных
+            //которая сгенерирует график платежей 
             DataContext = new InstalmentViewModel(Customer);
         }
 
         public Customer Customer { get; set; }
     }
 
+
+    //КЛАСС МОДЕЛИ ДАННЫХ
+    //ОТ ОТВЕЧАЕТ ЗА РАСЧЕТ ГРАФИКА ПЛАТЕЖЕЙ ДЛЯ КОНКРЕТНОЙ ЗАПИСИ В БД
     public class InstalmentViewModel {
+
         public string CustomerName { get; set; }
         public string LoanSum { get; set; }
         public string InterestRate { get; set; }
@@ -32,6 +40,7 @@ namespace BankApplication {
 
         public InstalmentViewModel(Customer customer)
         {
+            //при создании модели, заполняем все поля данными
             CustomerName = $"{customer.Name} {customer.Surname}";
             LoanSum = $"{(double)customer.Value} {customer.Currency}";
             InterestRate = $"{customer.InterestRate.Value}%";
@@ -40,10 +49,12 @@ namespace BankApplication {
             TotalDifferentialPercentage = $"{CalculateDifferentialPayments(customer)} {customer.Currency}";
         }
 
+        //расчет аннуитетных платежей
         double CalculateAnnuityPayments(Customer customer)
         {
             AnnuityRecords = new ObservableCollection<InstalmentRecord>();
 
+            //просто расчет согласно формуле
             double totalPercentage = 0;
 
             var period = customer.EndDate - customer.StartDate;
@@ -66,16 +77,57 @@ namespace BankApplication {
                     totalPayment += balance;
                     balance = 0;
                 }
-
+                //на каждом шаге добавляем запись в таблицу
                 AnnuityRecords.Add(new InstalmentRecord() { Date = recordDate, TotalPayment = Math.Round(totalPayment, 2), DebtPayment = Math.Round(debtPayment, 2), Percentage = percentage, Balance = Math.Round(balance, 2) });
             }
 
-            AnnuityData = CreateData(AnnuityRecords);
+            //создаем данные для графиков
+            AnnuityData = CreateGraphData(AnnuityRecords);
 
             return Math.Round(totalPercentage, 2);
         }
 
-        ObservableCollection<DataSeries> CreateData( ObservableCollection<InstalmentRecord> records)
+
+        //расчет дифференцированных платежей
+        double CalculateDifferentialPayments(Customer customer)
+        {
+            DifferentialRecords = new ObservableCollection<InstalmentRecord>();
+
+            //просто расчет согласно формуле
+            double totalPercentage = 0;
+
+            var period = customer.EndDate - customer.StartDate;
+            var months = period.Value.Days / 30;
+
+            double interestRate = (double)customer.InterestRate / 12 / 100;
+            double debtPayment = Math.Round((double)customer.Value/months, 2);
+            double balance = Math.Round((double)customer.Value, 2);
+
+            DateTime recordDate = customer.StartDate.Value;
+            for (int i = 1; i <= months; i++)
+            {
+                recordDate = recordDate.AddDays(30);
+                double percentage = Math.Round(balance * interestRate, 2);
+                totalPercentage += percentage;
+                double totalPayment = Math.Round(debtPayment + percentage, 2);
+                balance -= debtPayment;
+                if (i == months)
+                {
+                    debtPayment += balance;
+                    balance = 0;
+                }
+
+                //на каждом шаге добавляем запись в таблицу
+                DifferentialRecords.Add(new InstalmentRecord() { Date = recordDate, TotalPayment = Math.Round(totalPayment, 2), DebtPayment = Math.Round(debtPayment, 2), Percentage = percentage, Balance = Math.Round(balance, 2) });
+            }
+
+            //создаем данные для графиков
+            DifferentialData = CreateGraphData(DifferentialRecords);
+
+            return Math.Round(totalPercentage, 2);
+        }
+
+        ObservableCollection<DataSeries> CreateGraphData(ObservableCollection<InstalmentRecord> records)
         {
             ObservableCollection<DataSeries> data = new ObservableCollection<DataSeries>();
 
@@ -110,44 +162,9 @@ namespace BankApplication {
 
             return data;
         }
-
-        double CalculateDifferentialPayments(Customer customer)
-        {
-            DifferentialRecords = new ObservableCollection<InstalmentRecord>();
-
-            double totalPercentage = 0;
-
-            var period = customer.EndDate - customer.StartDate;
-            var months = period.Value.Days / 30;
-
-            double interestRate = (double)customer.InterestRate / 12 / 100;
-            double debtPayment = Math.Round((double)customer.Value/months, 2);
-            double balance = Math.Round((double)customer.Value, 2);
-
-            DateTime recordDate = customer.StartDate.Value;
-            for (int i = 1; i <= months; i++)
-            {
-                recordDate = recordDate.AddDays(30);
-                double percentage = Math.Round(balance * interestRate, 2);
-                totalPercentage += percentage;
-                double totalPayment = Math.Round(debtPayment + percentage, 2);
-                balance -= debtPayment;
-                if (i == months)
-                {
-                    debtPayment += balance;
-                    balance = 0;
-                }
-
-                DifferentialRecords.Add(new InstalmentRecord() { Date = recordDate, TotalPayment = Math.Round(totalPayment, 2), DebtPayment = Math.Round(debtPayment, 2), Percentage = percentage, Balance = Math.Round(balance, 2) });
-            }
-
-            DifferentialData = CreateData(DifferentialRecords);
-
-            return Math.Round(totalPercentage, 2);
-        }
     }
 
-
+    //cлужебные классы для отображения данных и графиков
     public class InstalmentRecord {
         public DateTime Date { get; set; }
         public double TotalPayment { get; set; }

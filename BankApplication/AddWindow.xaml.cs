@@ -5,6 +5,7 @@ using System.Windows;
 
 namespace BankApplication
 {
+    //ОКНО ДОБАВЛЕНИЯ ЗАПИСИ В БД
     public partial class AddWindow : ThemedWindow
     {
         public AddWindow()
@@ -12,8 +13,9 @@ namespace BankApplication
             InitializeComponent();
         }
 
-        private void ThemedWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        void ThemedWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            //если была нажата кнопка ОК добавляем запись в бд
             if (DialogButtonResult == MessageBoxResult.OK)
             {
                 (Owner as MainWindow).Context.Customers.Add(new Customer()
@@ -29,6 +31,7 @@ namespace BankApplication
                 });
             }
 
+            //чистим поля с данными
             nameEditor.Clear();
             surnameEditor.Clear();
             valueEditor.Clear();
