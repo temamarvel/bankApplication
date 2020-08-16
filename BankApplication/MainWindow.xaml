@@ -8,27 +8,56 @@
         xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
         xmlns:local="clr-namespace:BankApplication"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
+        Title="MainWindow" Height="350" Width="525" Loaded="Window_Loaded">
+    <Window.Resources>
+        <CollectionViewSource x:Key="customerViewSource" d:DesignSource="{d:DesignInstance {x:Type local:Customer}, CreateList=True}"/>
+    </Window.Resources>
+    <Grid DataContext="{StaticResource customerViewSource}">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
+        <!--<DataGrid x:Name="customerDataGrid" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" Margin="86,109,31,10" Grid.RowSpan="2" RowDetailsVisibilityMode="VisibleWhenSelected">
+            <DataGrid.Columns>
+                <DataGridTextColumn x:Name="currencyColumn" Binding="{Binding Currency}" Header="Currency" Width="SizeToHeader"/>
+                <DataGridTemplateColumn x:Name="endDateColumn" Header="End Date" Width="SizeToHeader">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DatePicker SelectedDate="{Binding EndDate, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn x:Name="idColumn" Binding="{Binding Id}" Header="Id" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="interestRateColumn" Binding="{Binding InterestRate}" Header="Interest Rate" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="nameColumn" Binding="{Binding Name}" Header="Name" Width="SizeToHeader"/>
+                <DataGridTemplateColumn x:Name="startDateColumn" Header="Start Date" Width="SizeToHeader">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <DatePicker SelectedDate="{Binding StartDate, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn x:Name="surnameColumn" Binding="{Binding Surname}" Header="Surname" Width="SizeToHeader"/>
+                <DataGridTextColumn x:Name="valueColumn" Binding="{Binding Value}" Header="Value" Width="SizeToHeader"/>
+            </DataGrid.Columns>
+        </DataGrid>-->
         <StackPanel x:Name="optionsStack" Grid.Row="0">
             <dxe:TextEdit x:Name="nameEditor" NullText="Enter Name"/>
             <dxe:TextEdit x:Name="surnameEditor" NullText="Enter Surname"/>
             <dxe:TextEdit x:Name="valueEditor" NullText="Enter loan value"/>
             <dxe:TextEdit x:Name="currencyEditor" NullText="Enter currency name"/>
+            <dxe:TextEdit x:Name="interestRateEditor" NullText="Enter interest rate"/>
             <dxe:DateEdit x:Name="startDateEditor"/>
             <dxe:DateEdit x:Name="endDateEditor"/>
             <dx:SimpleButton x:Name="addLoanButton" Content="Add loan" Click="AddLoanButton_OnClick"/>
             <dx:SimpleButton x:Name="deleteLoanButton" Content="Delete loan" Click="DeleteLoanButton_OnClick"/>
         </StackPanel>
-        <dxg:GridControl x:Name="grid" ItemsSource="{Binding Loans}" MouseDoubleClick="Grid_OnMouseDoubleClick" Grid.Row="1">
+        <dxg:GridControl x:Name="grid" ItemsSource="{Binding}" MouseDoubleClick="Grid_OnMouseDoubleClick" Grid.Row="1">
             <dxg:GridColumn FieldName="Name"/>
             <dxg:GridColumn FieldName="Surname"/>
             <dxg:GridColumn FieldName="Value"/>
             <dxg:GridColumn FieldName="Currency"/>
+            <dxg:GridColumn FieldName="InterestRate"/>
             <dxg:GridColumn FieldName="StartDate"/>
             <dxg:GridColumn FieldName="EndDate"/>
             <dxg:GridControl.View>

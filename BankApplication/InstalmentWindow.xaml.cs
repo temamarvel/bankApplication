@@ -10,30 +10,30 @@ namespace BankApplication {
             InitializeComponent();
         }
 
-        public InstalmentWindow(Loan loan) : this() {
-            Loan = loan;
-            DataContext = new InstalmentViewModel(Loan);
+        public InstalmentWindow(Customer customer) : this() {
+            Customer = customer;
+            DataContext = new InstalmentViewModel(Customer);
         }
 
-        public Loan Loan { get; set; }
+        public Customer Customer { get; set; }
     }
 
     public class InstalmentViewModel {
         public ObservableCollection<InstalmentRecord> InstalmentRecords { get; set; }
         public ObservableCollection<DataSeries> Data { get; set; }
 
-        public InstalmentViewModel(Loan loan) {
+        public InstalmentViewModel(Customer customer) {
             InstalmentRecords = new ObservableCollection<InstalmentRecord>();
 
 
-            var period = loan.EndDate - loan.StartDate;
-            var months = period.Days / 30;
+            var period = customer.EndDate - customer.StartDate;
+            var months = period.Value.Days / 30;
 
-            double interestRate = loan.InterestRate / 12 / 100;
-            double payment = Math.Round(loan.Value * ((interestRate * Math.Pow(1 + interestRate, months)) / (Math.Pow(1 + interestRate, months) - 1)));
-            double balance = loan.Value;
+            double interestRate = (double)customer.InterestRate / 12 / 100;
+            double payment = Math.Round((double)customer.Value * ((interestRate * Math.Pow(1 + interestRate, months)) / (Math.Pow(1 + interestRate, months) - 1)));
+            double balance = (double)customer.Value;
 
-            DateTime recordDate = loan.StartDate;
+            DateTime recordDate = customer.StartDate.Value;
             for(int i = 1; i <= months; i++) {
                 recordDate = recordDate.AddDays(30);
                 double percentage = Math.Round(balance * interestRate, 2);
