@@ -9,15 +9,29 @@
         xmlns:local="clr-namespace:BankApplication"
         mc:Ignorable="d"
         Title="InstalmentWindow" Height="450" Width="800">
-    <dx:DXTabControl>
-        <dx:DXTabItem Header="Annuity payments">
-            <Grid>
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
+    
+    <StackPanel Grid.Row="0">
+        <Label Content="{Binding CustomerName}"/>
+        <Label Content="{Binding LoanSum}"/>
+        <Label Content="{Binding InterestRate}"/>
+        <Label Content="{Binding TotalAnnuityPercentage}"/>
+        <Label Content="{Binding TotalDifferentialPercentage}"/>
+        
+        
+    </StackPanel>
 
-
+    <dx:DXTabControl Grid.Row="1">
+        <dx:DXTabItem Header="Annuity payments">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
                 <dxg:GridControl x:Name="annuityGrid" ItemsSource="{Binding AnnuityRecords}" Grid.Row="0">
                     <dxg:GridColumn FieldName="Date"/>
                     <dxg:GridColumn FieldName="TotalPayment"/>
@@ -90,9 +104,6 @@
                 </dxch:ChartControl>
             </Grid>
         </dx:DXTabItem>
-        </dx:DXTabControl>
-        
-        
-        
-        
+    </dx:DXTabControl>
+    </Grid>
 </Window>

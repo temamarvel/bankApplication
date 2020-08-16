@@ -6,6 +6,13 @@ using System.Windows.Input;
 using DevExpress.Xpf.Editors.Helpers;
 
 namespace BankApplication {
+     public enum Currency
+    {
+        RUB,
+        EUR,
+        USD,
+    }
+
     public partial class MainWindow {
 
         BankDBEntities context = new BankDBEntities();

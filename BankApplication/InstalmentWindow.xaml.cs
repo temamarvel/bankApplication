@@ -19,6 +19,12 @@ namespace BankApplication {
     }
 
     public class InstalmentViewModel {
+        public string CustomerName { get; set; }
+        public double LoanSum { get; set; }
+        public string InterestRate { get; set; }
+        public double TotalAnnuityPercentage { get; set; }
+        public double TotalDifferentialPercentage { get; set; }
+
         public ObservableCollection<InstalmentRecord> AnnuityRecords { get; set; }
         public ObservableCollection<InstalmentRecord> DifferentialRecords { get; set; }
         public ObservableCollection<DataSeries> AnnuityData { get; set; }
@@ -26,14 +32,19 @@ namespace BankApplication {
 
         public InstalmentViewModel(Customer customer)
         {
-            CalculateAnnuityPayments(customer);
-            CalculateDifferentialPayments(customer);
+            CustomerName = $"{customer.Name} {customer.Surname}";
+            LoanSum = (double)customer.Value;
+            InterestRate = $"{customer.InterestRate.Value.ToString()}%";
+
+            TotalAnnuityPercentage = CalculateAnnuityPayments(customer);
+            TotalDifferentialPercentage = CalculateDifferentialPayments(customer);
         }
 
-        void CalculateAnnuityPayments(Customer customer)
+        double CalculateAnnuityPayments(Customer customer)
         {
             AnnuityRecords = new ObservableCollection<InstalmentRecord>();
 
+            double totalPercentage = 0;
 
             var period = customer.EndDate - customer.StartDate;
             var months = period.Value.Days / 30;
@@ -47,6 +58,7 @@ namespace BankApplication {
             {
                 recordDate = recordDate.AddDays(30);
                 double percentage = Math.Round(balance * interestRate, 2);
+                totalPercentage += percentage;
                 double debtPayment = Math.Round(totalPayment - percentage, 2);
                 balance -= debtPayment;
                 if (i == months)
@@ -88,11 +100,14 @@ namespace BankApplication {
             AnnuityData.Add(new DataSeries() { Name = "Dept", Values = valuesDept });
             AnnuityData.Add(new DataSeries() { Name = "Percentage", Values = valuesPercentage });
             AnnuityData.Add(new DataSeries() { Name = "Balance", Values = valuesBalance });
+
+            return totalPercentage;
         }
-        void CalculateDifferentialPayments(Customer customer)
+        double CalculateDifferentialPayments(Customer customer)
         {
             DifferentialRecords = new ObservableCollection<InstalmentRecord>();
 
+            double totalPercentage = 0;
 
             var period = customer.EndDate - customer.StartDate;
             var months = period.Value.Days / 30;
@@ -106,6 +121,7 @@ namespace BankApplication {
             {
                 recordDate = recordDate.AddDays(30);
                 double percentage = Math.Round(balance * interestRate, 2);
+                totalPercentage += percentage;
                 double totalPayment = Math.Round(debtPayment + percentage, 2);
                 balance -= debtPayment;
                 if (i == months)
@@ -147,6 +163,8 @@ namespace BankApplication {
             DifferentialData.Add(new DataSeries() { Name = "DebtPayment", Values = valuesDept });
             DifferentialData.Add(new DataSeries() { Name = "Percentage", Values = valuesPercentage });
             DifferentialData.Add(new DataSeries() { Name = "Balance", Values = valuesBalance });
+
+            return totalPercentage;
         }
     }
 

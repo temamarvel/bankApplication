@@ -45,10 +45,10 @@
             <dxe:TextEdit x:Name="nameEditor" NullText="Enter Name"/>
             <dxe:TextEdit x:Name="surnameEditor" NullText="Enter Surname"/>
             <dxe:TextEdit x:Name="valueEditor" NullText="Enter loan value"/>
-            <dxe:TextEdit x:Name="currencyEditor" NullText="Enter currency name"/>
+            <dxe:ComboBoxEdit x:Name="currencyEditor" ItemsSource="{dxe:EnumItemsSource EnumType=local:Currency}" SelectedIndex="0"/>
             <dxe:TextEdit x:Name="interestRateEditor" NullText="Enter interest rate"/>
-            <dxe:DateEdit x:Name="startDateEditor"/>
-            <dxe:DateEdit x:Name="endDateEditor"/>
+            <dxe:DateEdit x:Name="startDateEditor" NullText="Enter start date "/>
+            <dxe:DateEdit x:Name="endDateEditor" NullText="Enter end date"/>
             <dx:SimpleButton x:Name="addLoanButton" Content="Add loan" Click="AddLoanButton_OnClick"/>
             <dx:SimpleButton x:Name="deleteLoanButton" Content="Delete loan" Click="DeleteLoanButton_OnClick"/>
         </StackPanel>
