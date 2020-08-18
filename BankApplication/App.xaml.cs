@@ -8,7 +8,7 @@ namespace BankApplication {
     public partial class App : Application {
         protected override void OnStartup(StartupEventArgs e)
         {
-            ApplicationThemeHelper.ApplicationThemeName = Theme.Office2016ColorfulName;
+            ApplicationThemeHelper.ApplicationThemeName = Theme.Office2019ColorfulName;
             base.OnStartup(e);
         }
     }
